@@ -1,0 +1,18 @@
+Index: main.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import os\r\nimport pygame\r\n\r\nfrom pygame import MOUSEBUTTONUP\r\n\r\nfrom test import on_click\r\n\r\npygame.init()\r\npygame.mixer.init()\r\n\r\nWHITE = (255,255,255)\r\nBLACK = (0, 0, 0)\r\nDARK_GREEN = (2, 48, 32)\r\n\r\nWIDTH, HEIGHT = 900, 500\r\nWIN = pygame.display.set_mode((WIDTH, HEIGHT))\r\npygame.display.set_caption(\"Piano\")\r\n\r\nBORDER = pygame.Rect(WIDTH//4, 0, 100, 200)\r\n\r\n\r\nFPS = 60\r\n\r\nclass Notes():\r\n    def __init__(self, x, y, callback):\r\n        self.rect = pygame.image.get_rect()\r\n        self.x = x\r\n        self.y = y\r\n        self.callback = callback\r\n\r\n    def get_note(self):\r\n        for event in pygame.event.get():\r\n            if event.type == pygame.MOUSEBUTTONUP:\r\n                pos = pygame.mouse.get_pos()\r\n\r\n        def on_click(self):\r\n            sounda = pygame.mixer.Sound(os.path.join(\"Assets\", \"C3.mp3\"))\r\n            sounda.play()\r\n\r\n\r\n\r\nnote = Notes(100, 300, on_click())\r\n\r\n\r\ndef c_note(self):\r\n    pygame.draw.rect(WIN, WHITE, pygame.Rect(1, 300, 100, 300))\r\n\r\ndef draw_window():\r\n    WIN.fill(DARK_GREEN)\r\n    c_note()\r\n    pygame.display.update()\r\n\r\n\r\ndef main():\r\n    clock = pygame.time.Clock()\r\n    pos = 0, 0\r\n    run = True\r\n    while run:\r\n        clock.tick(FPS)\r\n        for event in pygame.event.get():\r\n            if event.type == pygame.QUIT:\r\n                run = False\r\n\r\n            if event.type == pygame.KEYDOWN:\r\n                if event.key == pygame.K_c:\r\n                    sounda = pygame.mixer.Sound(os.path.join(\"Assets\", \"C3.mp3\"))\r\n                    sounda.play()\r\n                if event.key == pygame.K_d:\r\n                    sounda = pygame.mixer.Sound(os.path.join(\"Assets\", \"D3.mp3\"))\r\n                    sounda.play()\r\n                if event.key == pygame.K_e:\r\n                    sounda = pygame.mixer.Sound(os.path.join(\"Assets\", \"E3.mp3\"))\r\n                    sounda.play()\r\n                if event.key == pygame.K_f:\r\n                    sounda = pygame.mixer.Sound(os.path.join(\"Assets\", \"F3.mp3\"))\r\n                    sounda.play()\r\n                if event.key == pygame.K_g:\r\n                    sounda = pygame.mixer.Sound(os.path.join(\"Assets\", \"G3.mp3\"))\r\n                    sounda.play()\r\n                if event.key == pygame.K_a:\r\n                    sounda = pygame.mixer.Sound(os.path.join(\"Assets\", \"A3.mp3\"))\r\n                    sounda.play()\r\n                if event.key == pygame.K_b:\r\n                    sounda = pygame.mixer.Sound(os.path.join(\"Assets\", \"B3.mp3\"))\r\n                    sounda.play()\r\n\r\n        draw_window()\r\n\r\n\r\n\r\nif __name__ == \"__main__\":\r\n    main()
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/main.py b/main.py
+--- a/main.py	(revision d9f8f6bfb2eca04d36bd5d30bbea50d01d12eded)
++++ b/main.py	(date 1729630128339)
+@@ -1,6 +1,6 @@
+ import os
+ import pygame
+-
++import time
+ from pygame import MOUSEBUTTONUP
+ 
+ from test import on_click

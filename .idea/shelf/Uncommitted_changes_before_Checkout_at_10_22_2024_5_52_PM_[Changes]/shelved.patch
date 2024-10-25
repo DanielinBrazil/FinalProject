@@ -1,0 +1,132 @@
+Index: main.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import os\r\nimport pygame\r\n\r\nfrom pygame import MOUSEBUTTONUP\r\n\r\nfrom test import on_click\r\n\r\npygame.init()\r\npygame.mixer.init()\r\n\r\nWHITE = (255,255,255)\r\nBLACK = (0, 0, 0)\r\nDARK_GREEN = (2, 48, 32)\r\n\r\nWIDTH, HEIGHT = 900, 500\r\nWIN = pygame.display.set_mode((WIDTH, HEIGHT))\r\npygame.display.set_caption(\"Piano\")\r\n\r\nBORDER = pygame.Rect(WIDTH//4, 0, 100, 200)\r\n\r\n\r\nFPS = 60\r\n\r\nclass Notes():\r\n    def __init__(self, x, y, callback):\r\n        self.rect = pygame.image.get_rect()\r\n        self.x = x\r\n        self.y = y\r\n        self.callback = callback\r\n\r\n    def get_note(self):\r\n        for event in pygame.event.get():\r\n            if event.type == pygame.MOUSEBUTTONUP:\r\n                pos = pygame.mouse.get_pos()\r\n\r\n        def on_click(self):\r\n            sounda = pygame.mixer.Sound(os.path.join(\"Assets\", \"C3.mp3\"))\r\n            sounda.play()\r\n\r\n\r\n\r\nnote = Notes(100, 300, on_click())\r\n\r\n\r\ndef c_note(self):\r\n    pygame.draw.rect(WIN, WHITE, pygame.Rect(1, 300, 100, 300))\r\n\r\ndef draw_window():\r\n    WIN.fill(DARK_GREEN)\r\n    c_note()\r\n    pygame.display.update()\r\n\r\n\r\ndef main():\r\n    clock = pygame.time.Clock()\r\n    pos = 0, 0\r\n    run = True\r\n    while run:\r\n        clock.tick(FPS)\r\n        for event in pygame.event.get():\r\n            if event.type == pygame.QUIT:\r\n                run = False\r\n\r\n            if event.type == pygame.KEYDOWN:\r\n                if event.key == pygame.K_c:\r\n                    sounda = pygame.mixer.Sound(os.path.join(\"Assets\", \"C3.mp3\"))\r\n                    sounda.play()\r\n                if event.key == pygame.K_d:\r\n                    sounda = pygame.mixer.Sound(os.path.join(\"Assets\", \"D3.mp3\"))\r\n                    sounda.play()\r\n                if event.key == pygame.K_e:\r\n                    sounda = pygame.mixer.Sound(os.path.join(\"Assets\", \"E3.mp3\"))\r\n                    sounda.play()\r\n                if event.key == pygame.K_f:\r\n                    sounda = pygame.mixer.Sound(os.path.join(\"Assets\", \"F3.mp3\"))\r\n                    sounda.play()\r\n                if event.key == pygame.K_g:\r\n                    sounda = pygame.mixer.Sound(os.path.join(\"Assets\", \"G3.mp3\"))\r\n                    sounda.play()\r\n                if event.key == pygame.K_a:\r\n                    sounda = pygame.mixer.Sound(os.path.join(\"Assets\", \"A3.mp3\"))\r\n                    sounda.play()\r\n                if event.key == pygame.K_b:\r\n                    sounda = pygame.mixer.Sound(os.path.join(\"Assets\", \"B3.mp3\"))\r\n                    sounda.play()\r\n\r\n        draw_window()\r\n\r\n\r\n\r\nif __name__ == \"__main__\":\r\n    main()
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/main.py b/main.py
+--- a/main.py	(revision d9f8f6bfb2eca04d36bd5d30bbea50d01d12eded)
++++ b/main.py	(date 1729630326447)
+@@ -1,92 +1,44 @@
+ import os
+ import pygame
+ 
+-from pygame import MOUSEBUTTONUP
+-
+-from test import on_click
+-
+-pygame.init()
+ pygame.mixer.init()
+ 
+-WHITE = (255,255,255)
+-BLACK = (0, 0, 0)
+-DARK_GREEN = (2, 48, 32)
+-
+-WIDTH, HEIGHT = 900, 500
+-WIN = pygame.display.set_mode((WIDTH, HEIGHT))
+-pygame.display.set_caption("Piano")
+-
+-BORDER = pygame.Rect(WIDTH//4, 0, 100, 200)
+-
+-
+-FPS = 60
+-
+-class Notes():
+-    def __init__(self, x, y, callback):
+-        self.rect = pygame.image.get_rect()
+-        self.x = x
+-        self.y = y
++class ClickableSprite(pygame.sprite.Sprite):
++    def __init__(self, image, x, y, callback):
++        super().__init__()
++        self.image = image
++        self.rect = self.image.get_rect()
++        self.rect.x = x
++        self.rect.y = y
+         self.callback = callback
+ 
+-    def get_note(self):
+-        for event in pygame.event.get():
++    def update(self, events):
++        for event in events:
+             if event.type == pygame.MOUSEBUTTONUP:
+-                pos = pygame.mouse.get_pos()
+-
+-        def on_click(self):
+-            sounda = pygame.mixer.Sound(os.path.join("Assets", "C3.mp3"))
+-            sounda.play()
++                if self.rect.collidepoint(event.pos):
++                    self.callback()
+ 
+ 
++def on_click():
+ 
+-note = Notes(100, 300, on_click())
+ 
+ 
+-def c_note(self):
+-    pygame.draw.rect(WIN, WHITE, pygame.Rect(1, 300, 100, 300))
++pygame.init()
++screen = pygame.display.set_mode((400, 300))
+ 
+-def draw_window():
+-    WIN.fill(DARK_GREEN)
+-    c_note()
+-    pygame.display.update()
++sprite = ClickableSprite(pygame.Surface((100, 100)), 50, 50, on_click)
++group = pygame.sprite.GroupSingle(sprite)
+ 
+-
+-def main():
+-    clock = pygame.time.Clock()
+-    pos = 0, 0
+-    run = True
+-    while run:
+-        clock.tick(FPS)
+-        for event in pygame.event.get():
+-            if event.type == pygame.QUIT:
+-                run = False
+-
+-            if event.type == pygame.KEYDOWN:
+-                if event.key == pygame.K_c:
+-                    sounda = pygame.mixer.Sound(os.path.join("Assets", "C3.mp3"))
+-                    sounda.play()
+-                if event.key == pygame.K_d:
+-                    sounda = pygame.mixer.Sound(os.path.join("Assets", "D3.mp3"))
+-                    sounda.play()
+-                if event.key == pygame.K_e:
+-                    sounda = pygame.mixer.Sound(os.path.join("Assets", "E3.mp3"))
+-                    sounda.play()
+-                if event.key == pygame.K_f:
+-                    sounda = pygame.mixer.Sound(os.path.join("Assets", "F3.mp3"))
+-                    sounda.play()
+-                if event.key == pygame.K_g:
+-                    sounda = pygame.mixer.Sound(os.path.join("Assets", "G3.mp3"))
+-                    sounda.play()
+-                if event.key == pygame.K_a:
+-                    sounda = pygame.mixer.Sound(os.path.join("Assets", "A3.mp3"))
+-                    sounda.play()
+-                if event.key == pygame.K_b:
+-                    sounda = pygame.mixer.Sound(os.path.join("Assets", "B3.mp3"))
+-                    sounda.play()
++running = True
++while running:
++    events = pygame.event.get()
++    for event in events:
++        if event.type == pygame.QUIT:
++            running = False
+ 
+-        draw_window()
++    group.update(events)
++    screen.fill((255, 255, 255))
++    group.draw(screen)
++    pygame.display.update()
+ 
+-
+-
+-if __name__ == "__main__":
+-    main()
+\ No newline at end of file
++pygame.quit()
+\ No newline at end of file
