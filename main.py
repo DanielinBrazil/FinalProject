@@ -99,22 +99,22 @@ def main():
                 if event.key == pygame.K_c:
                     sounda = pygame.mixer.Sound(os.path.join("Assets", "C3.mp3"))
                     sounda.play()
-                if event.key == pygame.K_d:
+                elif event.key == pygame.K_d:
                     sounda = pygame.mixer.Sound(os.path.join("Assets", "D3.mp3"))
                     sounda.play()
-                if event.key == pygame.K_e:
+                elif event.key == pygame.K_e:
                     sounda = pygame.mixer.Sound(os.path.join("Assets", "E3.mp3"))
                     sounda.play()
-                if event.key == pygame.K_f:
+                elif event.key == pygame.K_f:
                     sounda = pygame.mixer.Sound(os.path.join("Assets", "F3.mp3"))
                     sounda.play()
-                if event.key == pygame.K_g:
+                elif event.key == pygame.K_g:
                     sounda = pygame.mixer.Sound(os.path.join("Assets", "G3.mp3"))
                     sounda.play()
-                if event.key == pygame.K_a:
+                elif event.key == pygame.K_a:
                     sounda = pygame.mixer.Sound(os.path.join("Assets", "A3.mp3"))
                     sounda.play()
-                if event.key == pygame.K_b:
+                elif event.key == pygame.K_b:
                     sounda = pygame.mixer.Sound(os.path.join("Assets", "B3.mp3"))
                     sounda.play()
 
