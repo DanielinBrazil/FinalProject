@@ -32,24 +32,32 @@ notes = [
     ('C4', 'C4.mp3')
 ]
 
-
 class Notes(pygame.sprite.Sprite):
-    def __init__(self, image, x, y, sound):
+    def __init__(self, image, x, y, sound, is_black=False):
         super().__init__()
         self.image = image
         self.rect = self.image.get_rect(topleft=(x, y))
         self.sound = sound
+        self.is_black = is_black  # Flag to determine if the note is a black key
 
-    def update(self, events):
+    def update(self, events, black_keys):
         for event in events:
-            if event.type == pygame.MOUSEBUTTONUP:
-                if self.rect.collidepoint(event.pos):
-                    self.sound.play()
+            if event.type == pygame.MOUSEBUTTONUP:  # When mouse button is released
+                if self.rect.collidepoint(event.pos):  # Check if clicked inside this key's rect
+                    if self.sound:  # Check if the sound is available
+                        # If this is a black key, play its sound
+                        if self.is_black:
+                            self.sound.play()
+                            return True  # Indicate that a black key was pressed
+                        else:
+                            # If it's a white key, only play if no black key was pressed
+                            if not any(black_key.rect.collidepoint(event.pos) for black_key in black_keys):
+                                self.sound.play()
+        return False  # Indicate that no black key was pressed
 
 
 def load_sound(file_name):
     return pygame.mixer.Sound(os.path.join("Assets", file_name))
-
 
 # Load sounds and create note sprites
 white_keys = []
@@ -57,72 +65,50 @@ black_keys = []
 
 for idx, (note_name, sound_file) in enumerate(notes):
     # Create white keys
-    white_key = pygame.Surface((WHITE_KEY_WIDTH, WHITE_KEY_HEIGHT))
-    white_key.fill(WHITE)
-    white_keys.append(Notes(white_key, idx * WHITE_KEY_WIDTH, 100, load_sound(sound_file)))
+    if note_name in ["C3", "D3", "E3", "F3", "G3", "A3", "B3", "C4"]:
+        white_key = pygame.Surface((WHITE_KEY_WIDTH, WHITE_KEY_HEIGHT))
+        white_key.fill(WHITE)
+        white_keys.append(Notes(white_key, idx * WHITE_KEY_WIDTH, 100, load_sound(sound_file)))
+        white_sound = sound_file
 
     # Create black keys for specific notes
     if note_name in ['Db3', 'Eb3', 'Gb3', 'Ab3', 'Bb3']:
+        black_key_x = (idx * WHITE_KEY_WIDTH) + (WHITE_KEY_WIDTH - BLACK_KEY_WIDTH) / 2
         black_key = pygame.Surface((BLACK_KEY_WIDTH, BLACK_KEY_HEIGHT))
         black_key.fill(BLACK)
-        black_keys.append(
-            Notes(black_key, (idx + 0.5) * WHITE_KEY_WIDTH - BLACK_KEY_WIDTH / 2, 100, load_sound(sound_file)))
+        white_keys.append(Notes(white_key, idx * WHITE_KEY_WIDTH, 100, load_sound(white_sound)))
+        black_keys.append(Notes(black_key, black_key_x, 100, load_sound(sound_file), is_black=True))
 
 # Combine all notes into a single sprite group
 all_keys = pygame.sprite.Group(*white_keys, *black_keys)
 
-
 def draw_window():
     WIN.fill(BLUE_GREEN)  # Background color
-
     # Draw all keys
     all_keys.draw(WIN)
 
     # Draw borders for white keys
     for idx in range(len(white_keys)):
-        pygame.draw.rect(WIN, WHITE_BORDER, (idx * WHITE_KEY_WIDTH, 100, WHITE_KEY_WIDTH, WHITE_KEY_HEIGHT), 3)
+        pygame.draw.rect(WIN, WHITE_BORDER, (idx * WHITE_KEY_WIDTH, 100, WHITE_KEY_WIDTH +50, WHITE_KEY_HEIGHT), 3)
 
     pygame.display.update()
-
 
 def main():
     clock = pygame.time.Clock()
     run = True
     while run:
         clock.tick(FPS)
-        events = pygame.event.get()  # Get events inside the main loop
+        events = pygame.event.get()  # Get all events
         for event in events:
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT:  # Exit condition
                 run = False
+        # Update all notes based on events
+        for note in all_keys:
+            note.update(events, black_keys)
 
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_c:
-                    sounda = pygame.mixer.Sound(os.path.join("Assets", "C3.mp3"))
-                    sounda.play()
-                elif event.key == pygame.K_d:
-                    sounda = pygame.mixer.Sound(os.path.join("Assets", "D3.mp3"))
-                    sounda.play()
-                elif event.key == pygame.K_e:
-                    sounda = pygame.mixer.Sound(os.path.join("Assets", "E3.mp3"))
-                    sounda.play()
-                elif event.key == pygame.K_f:
-                    sounda = pygame.mixer.Sound(os.path.join("Assets", "F3.mp3"))
-                    sounda.play()
-                elif event.key == pygame.K_g:
-                    sounda = pygame.mixer.Sound(os.path.join("Assets", "G3.mp3"))
-                    sounda.play()
-                elif event.key == pygame.K_a:
-                    sounda = pygame.mixer.Sound(os.path.join("Assets", "A3.mp3"))
-                    sounda.play()
-                elif event.key == pygame.K_b:
-                    sounda = pygame.mixer.Sound(os.path.join("Assets", "B3.mp3"))
-                    sounda.play()
-
-        all_keys.update(events)
-        draw_window()
+        draw_window()  # Render the window
 
     pygame.quit()
-
 
 if __name__ == "__main__":
     main()
