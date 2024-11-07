@@ -1,1 +1,1 @@
-1). pip install pypiano
+1). pip install pygame
