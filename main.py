@@ -89,7 +89,7 @@ def draw_window():
 
     # Draw borders for white keys
     for idx in range(len(white_keys)):
-        pygame.draw.rect(WIN, WHITE_BORDER, (idx * WHITE_KEY_WIDTH, 100, WHITE_KEY_WIDTH +50, WHITE_KEY_HEIGHT), 3)
+        pygame.draw.rect(WIN, WHITE_BORDER, (idx * WHITE_KEY_WIDTH, 100, WHITE_KEY_WIDTH, WHITE_KEY_HEIGHT), 3)
 
     pygame.display.update()
 
