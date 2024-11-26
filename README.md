@@ -1,7 +1,7 @@
 # FinalProject
 
-this project was made for a class i am doing.
-this is a begginer project and the first time me actualy doing
+this project was made for a class I am doing.
+this is a begginer project and the first time I actualy doing
 somthing like this.
 
 this is a project for a paino that impliment a GUI and also
